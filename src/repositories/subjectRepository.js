@@ -1,6 +1,6 @@
 const connection = require('../database');
 
-async function getAllSubjects() {
+async function findAllSubjects() {
     try {
         return connection.query('SELECT * FROM subjects');
     } catch (e) {
@@ -8,6 +8,18 @@ async function getAllSubjects() {
     }
 }
 
+async function findProfessorFromSubject(subjectName) {
+    try {
+        return connection.query(`SELECT p.name FROM subjects AS s
+        JOIN professor_subject AS ps ON ps."subjectId" = s.id
+        JOIN professors AS p ON p."subjectId" = ps."subjectId"
+        WHERE s.name = $1`, [subjectName]);
+    } catch (e) {
+        return e;
+    }
+}
+
 module.exports = { 
-    getAllSubjects
+    findAllSubjects,
+    findProfessorFromSubject
 };
