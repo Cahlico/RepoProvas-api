@@ -4,12 +4,15 @@ const cors = require("cors");
 const app = express();
 
 const subjectController = require('./controllers/subjectController');
+const examsController = require('./controllers/examsController');
 
 app.use(cors());
 app.use(express.json());
 
 app.get('/api/v1/subjects', subjectController.getSubjects);
-app.post('/api/v1/subjects/professor', subjectController.getProfessorFromSubject)
+app.post('/api/v1/subjects/professor', subjectController.getProfessorFromSubject);
+
+app.post('/api/v1/exams', examsController.sendExam);
 
 const port = process.env.PORT;
 
