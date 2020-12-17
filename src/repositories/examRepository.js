@@ -19,7 +19,8 @@ async function findExamsBySubject(subject) {
         return connection.query(`SELECT name, "examType", link FROM subjects
         JOIN subjects_exams AS se ON se."examId" = subjects.id
         JOIN exams AS e ON e."subjectId" = se."examId"
-        WHERE subjects.name = $1`, [subject]);
+        WHERE subjects.name = $1
+        ORDER BY "examType"`, [subject]);
     } catch(e) {
         return e;
     }
@@ -32,7 +33,8 @@ async function findExamsByProfessor(id) {
         JOIN subjects AS s ON s.id = ps."subjectId"
         JOIN subjects_exams AS se ON se."examId" = s.id
         JOIN exams AS e ON e."subjectId" = se."examId"
-        WHERE p."subjectId" = $1`, [id]);
+        WHERE p."subjectId" = $1
+        ORDER BY "examType"`, [id]);
     } catch(e) {
         return e;
     }
