@@ -106,5 +106,9 @@ describe('GET /api/v1/exams/professors:id', () => {
         expect(response.body[0]).toHaveProperty('name');
         expect(response.body[0]).toHaveProperty('link');
         expect(response.body[0]).toHaveProperty('examType');
-    })
-})
+    });
+});
+
+/*describe('POST /api/v1/subjects', () => {
+    it()
+});*/
