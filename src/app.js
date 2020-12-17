@@ -11,6 +11,7 @@ app.use(express.json());
 
 app.get('/api/v1/subjects', subjectController.getSubjects);
 app.post('/api/v1/subjects/professor', subjectController.getProfessorFromSubject);
+app.get('/api/v1/professors', subjectController.getProfessors);
 
 app.post('/api/v1/exams', examsController.sendExam);
 

@@ -2,7 +2,7 @@ const connection = require('../database');
 
 async function findAllSubjects() {
     try {
-        return connection.query('SELECT * FROM subjects');
+        return connection.query('SELECT * FROM subjects ORDER BY period');
     } catch (e) {
         return e;
     }
@@ -19,7 +19,16 @@ async function findProfessorFromSubject(subjectName) {
     }
 }
 
+async function findAllProfessors() {
+    try {
+        return connection.query('SELECT * FROM professors');
+    } catch (e) {
+        return e;
+    }
+}
+
 module.exports = { 
     findAllSubjects,
-    findProfessorFromSubject
+    findProfessorFromSubject,
+    findAllProfessors
 };

@@ -1,4 +1,8 @@
-const { findAllSubjects, findProfessorFromSubject } = require('../repositories/subjectRepository');
+const { findAllSubjects, 
+    findProfessorFromSubject, 
+    findAllProfessors 
+} = require('../repositories/subjectRepository');
+
 const subjectSchema = require('../schemas/subjectSchemas');
 
 async function getSubjects(req, res) {
@@ -20,7 +24,15 @@ async function getProfessorFromSubject(req, res) {
     res.send(response.rows);
 }
 
+async function getProfessors(req, res) {
+    const response = await findAllProfessors();
+    if(!response.rows) return res.send(response).sendStatus(500);
+
+    res.send(response.rows);
+}
+
 module.exports = {
     getSubjects,
-    getProfessorFromSubject
+    getProfessorFromSubject,
+    getProfessors
 };

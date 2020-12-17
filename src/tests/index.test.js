@@ -72,3 +72,14 @@ describe('POST /api/v1/exams', () => {
         expect(response.status).toBe(422);
     });
 });
+
+describe('GET /api/v1/professors', () => {
+    it('should return 200 with the correct body', async () => {
+        const response = await supertest(app).get('/api/v1/professors');
+
+        expect(response.status).toBe(200);
+
+        expect(response.body[0]).toHaveProperty('name');
+        expect(response.body[0]).toHaveProperty('subjectId');
+    })
+})
