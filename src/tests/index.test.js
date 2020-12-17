@@ -96,3 +96,15 @@ describe('GET /api/v1/exams/subject:subject', () => {
         expect(response.body[0]).toHaveProperty('examType');
     });
 });
+
+describe('GET /api/v1/exams/professors:id', () => {
+    it('should return 200 and the correct body', async () => {
+        const response = await supertest(app).get('/api/v1/exams/professor:15');
+
+        expect(response.status).toBe(200);
+
+        expect(response.body[0]).toHaveProperty('name');
+        expect(response.body[0]).toHaveProperty('link');
+        expect(response.body[0]).toHaveProperty('examType');
+    })
+})

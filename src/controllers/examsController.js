@@ -1,5 +1,8 @@
 const examSchema = require('../schemas/examSchema');
-const { insertExam, findExamsBySubject } = require('../repositories/examRepository');
+const { insertExam, 
+    findExamsBySubject,
+    findExamsByProfessor 
+} = require('../repositories/examRepository');
 
 async function sendExam(req, res) {
     const examParams = req.body;
@@ -23,7 +26,18 @@ async function getExamsBySubject(req, res) {
     res.send(response.rows);
 }
 
+async function getExamsByProfessor(req, res) {
+    const params = req.params.id.slice(1);
+    const id = parseInt(params);
+
+    const response = await findExamsByProfessor(id);
+    if(response.error) res.send(response).sendStatus(500);
+
+    res.send(response.rows);
+}
+
 module.exports = {
     sendExam,
-    getExamsBySubject
+    getExamsBySubject,
+    getExamsByProfessor
 };
