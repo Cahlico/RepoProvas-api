@@ -3,7 +3,8 @@ const { findAllSubjects,
     findAllProfessors,
     sendNewSubject,
     sendNewProfessor,
-    addNewConectionTable
+    addNewConectionTable,
+    addNewProfessor
 } = require('../repositories/subjectRepository');
 
 const subjectSchema = require('../schemas/subjectSchemas');
@@ -52,9 +53,22 @@ async function addSubject(req, res) {
     res.sendStatus(201);
 }
 
+async function addProfessor(req, res) {
+    const postParams = req.body;
+
+    const { error } = subjectSchema.professorParams.validate(postParams);
+    if(error) return res.status(422).send({ error: error.details[0].message });
+
+    const response = await addNewProfessor(postParams);
+    if(!response.rows) return res.send(response).sendStatus(500);
+
+    res.sendStatus(201);
+}
+
 module.exports = {
     getSubjects,
     getProfessorFromSubject,
     getProfessors,
-    addSubject
+    addSubject,
+    addProfessor
 };
