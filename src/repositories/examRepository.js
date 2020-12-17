@@ -14,6 +14,18 @@ function insertExam(examParams) {
     }
 }
 
+async function findExamsBySubject(subject) {
+    try {
+        return connection.query(`SELECT name, "examType", link FROM subjects
+        JOIN subjects_exams AS se ON se."examId" = subjects.id
+        JOIN exams AS e ON e."subjectId" = se."examId"
+        WHERE subjects.name = $1`, [subject]);
+    } catch(e) {
+        return e;
+    }
+}
+
 module.exports = {
-    insertExam
+    insertExam,
+    findExamsBySubject
 };

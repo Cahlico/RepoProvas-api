@@ -1,6 +1,7 @@
 const db = require('../database');
 const supertest = require('supertest');
 const app = require('../app');
+const { isRef } = require('joi');
 
 async function resetDataBase() {
     await db.query('DELETE FROM exams');
@@ -57,7 +58,7 @@ describe('POST /api/v1/exams', () => {
 
         const response = await supertest(app).post('/api/v1/exams').send(body);
 
-        expect(response.status).toBe(200);
+        expect(response.status).toBe(201);
     });
 
     it('should return 422 when the body is invalid', async () => {
@@ -81,5 +82,17 @@ describe('GET /api/v1/professors', () => {
 
         expect(response.body[0]).toHaveProperty('name');
         expect(response.body[0]).toHaveProperty('subjectId');
-    })
-})
+    });
+});
+
+describe('GET /api/v1/exams/subject:subject', () => {
+    it('should return 200 and the correct body', async () => {
+        const response = await supertest(app).get('/api/v1/exams/subject:sistemas lineares 1');
+
+        expect(response.status).toBe(200);
+
+        expect(response.body[0]).toHaveProperty('name');
+        expect(response.body[0]).toHaveProperty('link');
+        expect(response.body[0]).toHaveProperty('examType');
+    });
+});

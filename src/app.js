@@ -14,6 +14,7 @@ app.post('/api/v1/subjects/professor', subjectController.getProfessorFromSubject
 app.get('/api/v1/professors', subjectController.getProfessors);
 
 app.post('/api/v1/exams', examsController.sendExam);
+app.get('/api/v1/exams/subject:subject', examsController.getExamsBySubject);
 
 const port = process.env.PORT;
 
