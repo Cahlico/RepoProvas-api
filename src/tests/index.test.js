@@ -1,7 +1,6 @@
 const db = require('../database');
 const supertest = require('supertest');
 const app = require('../app');
-const { isRef } = require('joi');
 
 async function resetDataBase() {
     await db.query('DELETE FROM exams');
@@ -24,6 +23,7 @@ describe('GET /api/v1/subjects', () => {
 
         expect(response.body[0]).toHaveProperty('id');
         expect(response.body[0]).toHaveProperty('name');
+        expect(response.body[0].count).toHaveProperty('count');
         expect(response.body[0]).toHaveProperty('period');
     });
 });
@@ -81,6 +81,7 @@ describe('GET /api/v1/professors', () => {
         expect(response.status).toBe(200);
 
         expect(response.body[0]).toHaveProperty('name');
+        expect(response.body[0].count).toHaveProperty('count');
         expect(response.body[0]).toHaveProperty('subjectId');
     });
 });
@@ -109,6 +110,52 @@ describe('GET /api/v1/exams/professors:id', () => {
     });
 });
 
-/*describe('POST /api/v1/subjects', () => {
-    it()
-});*/
+describe('POST /api/v1/subjects', () => {
+    it('should return 201 when the body is correct', async () => {
+        const body = {
+            name: 'teoria eletromagnética 2',
+            period: 7,
+            professorName: 'joão silva'
+        };
+
+        const response = await supertest(app).post('/api/v1/subjects').send(body);
+
+        expect(response.status).toBe(201);
+    });
+
+    it('should return 422 when the body is invalid', async () => {
+        const body = {
+            name: 'teoria eletromagnética 2',
+            period: '',
+            professorName: 'joão silva'
+        };
+
+        const response = await supertest(app).post('/api/v1/subjects').send(body);
+
+        expect(response.status).toBe(422);
+    });
+});
+
+describe('POST /api/v1/subject/new-professor', () => {
+    it('should return 201 when the body is valid', async () => {
+        const body = {
+            name: 'teoria eletromagnética 2',
+            professorName: 'Ricardo Lessa'
+        };
+
+        const response = await supertest(app).post('/api/v1/subject/new-professor').send(body);
+
+        expect(response.status).toBe(201);
+    });
+
+    it('should return 422 when the body is invalid', async () => {
+        const body = {
+            name: 'teoria eletromagnética 2',
+            professorName: 2
+        };
+
+        const response = await supertest(app).post('/api/v1/subject/new-professor').send(body);
+
+        expect(response.status).toBe(422);
+    });
+});

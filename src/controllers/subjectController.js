@@ -45,10 +45,10 @@ async function getProfessors(req, res) {
 
     let body = [];
     for(let i = 0; i < response.rows.length; i++) {
-        const name = response.rows[i].name;
+        const { name, subjectId } = response.rows[i];
         const resp = await getExamsByProfessor(name);
         const count = resp.rows[0];
-        body.push({ name, count });
+        body.push({ name, count, subjectId });
     }
 
     res.send(body);
