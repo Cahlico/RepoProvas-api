@@ -1,10 +1,12 @@
 const { findAllSubjects, 
     findProfessorFromSubject, 
     findAllProfessors,
+    getExamsByProfessor,
     sendNewSubject,
     sendNewProfessor,
     addNewConectionTable,
-    addNewProfessor
+    addNewProfessor,
+    getExamsBySubject
 } = require('../repositories/subjectRepository');
 
 const subjectSchema = require('../schemas/subjectSchemas');
@@ -13,7 +15,16 @@ async function getSubjects(req, res) {
     const response = await findAllSubjects();
     if(!response.rows) return res.send(response).sendStatus(500);
 
-    res.send(response.rows);
+    let body = [];
+    for(let i = 0; i < response.rows.length; i++) {
+        const { name, id, period } = response.rows[i];
+
+        const resp = await getExamsBySubject(id);
+        const count = resp.rows[0];
+        body.push({ name, id, count, period });
+    }
+
+    res.send(body);
 }
 
 async function getProfessorFromSubject(req, res) {
@@ -32,7 +43,15 @@ async function getProfessors(req, res) {
     const response = await findAllProfessors();
     if(!response.rows) return res.send(response).sendStatus(500);
 
-    res.send(response.rows);
+    let body = [];
+    for(let i = 0; i < response.rows.length; i++) {
+        const name = response.rows[i].name;
+        const resp = await getExamsByProfessor(name);
+        const count = resp.rows[0];
+        body.push({ name, count });
+    }
+
+    res.send(body);
 }
 
 async function addSubject(req, res) {

@@ -8,6 +8,17 @@ async function findAllSubjects() {
     }
 }
 
+async function getExamsBySubject(id) {
+    try {
+        return connection.query(`SELECT COUNT(e."subjectId") FROM subjects AS s
+        JOIN subjects_exams AS se ON se."examId" = s.id
+        JOIN exams AS e ON e."subjectId" = se."examId"
+        WHERE s.id = $1`, [id]);
+    } catch(e) {
+        return e;
+    }
+}
+
 async function findProfessorFromSubject(subjectName) {
     try {
         return connection.query(`SELECT p.name FROM subjects AS s
@@ -23,6 +34,19 @@ async function findAllProfessors() {
     try {
         return connection.query('SELECT * FROM professors');
     } catch (e) {
+        return e;
+    }
+}
+
+async function getExamsByProfessor(name) {
+    try {
+        return connection.query(`SELECT COUNT(e."subjectId") FROM professors AS p
+        JOIN professor_subject AS ps ON ps."subjectId" = p."subjectId"
+        JOIN subjects AS s ON s.id = ps."subjectId"
+        JOIN subjects_exams AS se ON se."examId" = s.id
+        JOIN exams AS e ON e."subjectId" = se."examId"
+        WHERE p.name = $1`, [name]);
+    } catch(e) {
         return e;
     }
 }
@@ -84,5 +108,7 @@ module.exports = {
     sendNewSubject,
     sendNewProfessor,
     addNewConectionTable,
-    addNewProfessor
+    addNewProfessor,
+    getExamsByProfessor,
+    getExamsBySubject
 };
